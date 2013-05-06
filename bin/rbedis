@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby	
+
+File.tap { |f| require f.expand_path(f.join(f.dirname(__FILE__),'..', 'rbedis.rb')) }
+
+
+Rbedis::Backend.new(ARGV)
