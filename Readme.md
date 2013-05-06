@@ -12,7 +12,7 @@ Usage
 
 This is a basic Redis server built in Ruby (with Eventmachine). It supports basic key and server commands ([Redis Commands](http://redis.io/commands#generic)). 
 
-It doesn't support hashes, lists, sets, sorted sets, pub sub, transactions, scripting and multiple databases.
+It doesn't support hashes, lists, sets, sorted sets, pub sub, transactions and scripting.
 
 The database is named `database.rbedis`, and it's created the first time you run it. The config file is `config.rb`.
 
