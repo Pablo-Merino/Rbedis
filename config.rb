@@ -6,7 +6,7 @@ Rbedis::Configuration.configure do
 
   address '0.0.0.0'
 
-  data_directory "/home/pablo"
+  data_directory "./"
 
   password "test"
   

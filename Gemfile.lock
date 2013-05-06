@@ -1,12 +1,14 @@
 PATH
   remote: .
   specs:
-    rbedis (0.0.0)
+    rbedis (0.0.1)
       active_support (~> 3.0.0)
       colored (~> 1.2)
+      eventmachine (~> 1.0.3)
+      i18n (~> 0.6.4)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     active_support (3.0.0)
       activesupport (= 3.0.0)
@@ -14,6 +16,8 @@ GEM
     bump (0.4.1)
     colored (1.2)
     diff-lcs (1.2.4)
+    eventmachine (1.0.3)
+    i18n (0.6.4)
     rake (10.0.4)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)

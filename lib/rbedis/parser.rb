@@ -2,10 +2,8 @@ module Rbedis
   class Parser
 
     def initialize(string)
-      p string
       @string = string.gsub(/^(\$.*\r\n)/, "").gsub(/^(\*.*\r\n)/, "").split("\r\n")
       @string = @string.join(" ")
-      p @string
     end
 
     def parse

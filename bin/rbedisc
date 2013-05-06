@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby	
+
+require "readline"
+require "optparse"
+require "redis"
+require "colored"
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{__FILE__} [options]"
+
+  opts.on("-s server", "--server server", String, "Specify the server") do |server|
+    options[:server] = server
+  end
+
+  opts.on("-p port", "--port port", Integer, "Specify the server's port") do |port|
+    options[:port] = port
+  end
+
+  opts.on("-a password", "--password password", String, "Specify the server's password") do |password|
+    options[:password] = password
+  end
+end.parse!
+
+if options[:password]
+  @redis = Redis.new(:host => options[:server], :port => options[:port], :password => options[:password])
+else
+  @redis = Redis.new(:host => options[:server], :port => options[:port])
+end
+
+while buf = Readline.readline("rbedis > ", true)
+  splitted = buf.split(" ")
+  command = splitted[0]
+  splitted.shift
+  if command == "quit"
+    @redis.quit
+    exit
+  else
+    begin
+      puts "[#{"SUCCESS".green}]\n#{@redis.send(command, *splitted)}"
+    rescue Redis::CommandError => e
+      puts "[#{"ERROR".red}] Command error"
+    rescue Redis::CannotConnectError => e
+      puts "[#{"ERROR".red}] Connection refused"
+    end
+  end
+end

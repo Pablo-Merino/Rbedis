@@ -17,7 +17,11 @@ module Rbedis
       end.parse!
 
       Logger.info "Rbedis 0.0.1 -- boot time: #{Time.now}"
-
+      if options.empty?
+        Logger.error "Please specify a config file!"
+        exit
+      end
+      
       load "#{File.expand_path(options[:config])}"
 
       @datastore = Datastore.new   
@@ -294,6 +298,16 @@ module Rbedis
         else
           "-ERR incorrect password"
         end
+      else
+        "-ERR wrong number of arguments for 'auth' command"
+      end
+    end
+
+    def redis_select(values)
+      values.flatten!
+      if values.size == 1
+        @datastore.switch_db(values[0].to_i)
+        "+OK"
       else
         "-ERR wrong number of arguments for 'auth' command"
       end

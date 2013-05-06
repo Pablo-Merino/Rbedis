@@ -5,41 +5,49 @@ module Rbedis
     attr_accessor :database
 
     def initialize
+      @current_database = 0
       @database_file = "#{Configuration.settings[:data_directory]}database.rbedis"
       if File.exists?(@database_file)
         database_string = File.open(@database_file).read
         if !database_string.empty?
           @database = Marshal.load(database_string)
         else
-          @database = {}
+          @database = {0 => {}}
         end
       else
-        @database = {}
+        @database = {0 => {}}
       end
     end
 
     def []=(key, value)
-      @database[key] = value
+      @database[@current_database][key] = value
     end
 
     def get(key)
-      @database[key] || nil
+      @database[@current_database][key] || nil
     end
 
     def size
-      @database.size
+      @database[@current_database].size
     end
 
     def delete(key)
-      @database.delete(key)
+      @database[@current_database].delete(key)
     end
 
     def flush
-      @database = {}
+      @database[@current_database] = {}
     end
 
     def has_key?(key)
       @database.has_key?(key)
+    end
+
+    def switch_db(index)
+      @current_database = index.to_i
+      if !@database.has_key?(index.to_i)
+        @database[@current_database] = {} 
+      end
     end
 
     def save_database
