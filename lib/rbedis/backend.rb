@@ -21,7 +21,7 @@ module Rbedis
         Logger.error "Please specify a config file!"
         exit
       end
-      
+
       load "#{File.expand_path(options[:config])}"
 
       @datastore = Datastore.new   
@@ -242,9 +242,20 @@ module Rbedis
       end
     end
 
+    def redis_flushall(*values)
+      values.flatten!
+      if values.size == 0
+        @datastore.flushall
+        "+OK"
+      else
+        "-ERR wrong number of arguments for 'echo' command"
+      end
+    end
+
     def redis_shutdown(*values)
       values.flatten!
       if values.size == 0
+        @database.save_database
         exit
       else
         "-ERR syntax error"
@@ -309,7 +320,17 @@ module Rbedis
         @datastore.switch_db(values[0].to_i)
         "+OK"
       else
-        "-ERR wrong number of arguments for 'auth' command"
+        "-ERR wrong number of arguments for 'select' command"
+      end
+    end
+
+    def redis_randomkey(values)
+      values.flatten!
+      if values.size == 0
+        rand_key = @datastore.random_key
+        "$#{rand_key.to_s.bytesize}\r\n#{rand_key}"
+      else
+        "-ERR wrong number of arguments for 'randomkey' command"
       end
     end
 

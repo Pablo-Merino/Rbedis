@@ -39,8 +39,13 @@ module Rbedis
       @database[@current_database] = {}
     end
 
+    def flushall
+      @database = {0 => {}}
+      @current_database = 0
+    end
+
     def has_key?(key)
-      @database.has_key?(key)
+      @database[@current_database].has_key?(key)
     end
 
     def switch_db(index)
@@ -48,6 +53,10 @@ module Rbedis
       if !@database.has_key?(index.to_i)
         @database[@current_database] = {} 
       end
+    end
+
+    def random_key
+      @database[@current_database].keys[rand(@database[@current_database].size)]
     end
 
     def save_database
